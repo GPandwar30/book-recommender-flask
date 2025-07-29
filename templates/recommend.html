@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Book Recommendation</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      animation: fadeIn 1s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .book-img {
+      height: 240px;
+      object-fit: cover;
+      border-radius: 5px;
+      transition: transform 0.3s ease-in-out;
+    }
+    .book-img:hover {
+      transform: scale(1.05);
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+    .toggle-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body class="bg-body text-body">
+  <div class="toggle-btn">
+    <button class="btn btn-outline-dark" onclick="toggleTheme()">🌓 Toggle Theme</button>
+  </div>
+
+  <div class="container mt-4">
+    <h1 class="text-center mb-4">🔍 Book Recommendation</h1>
+
+    <form method="POST" class="row justify-content-center mb-4">
+      <div class="col-md-6">
+        <input type="text" name="book_name" class="form-control" placeholder="Enter a book title" required>
+      </div>
+      <div class="col-md-auto">
+        <button type="submit" class="btn btn-success">Recommend</button>
+        <a href="/" class="btn btn-outline-secondary ms-2">🏠 Home</a>
+      </div>
+    </form>
+
+    {% if error %}
+      <div class="alert alert-danger text-center">{{ error }}</div>
+    {% endif %}
+
+    {% if data %}
+    <h4 class="text-center mb-4">Books similar to <em>{{ book }}</em></h4>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+      {% for item in data %}
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <img src="{{ item[2] }}" class="card-img-top book-img" alt="{{ item[0] }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ item[0] }}</h5>
+            <p class="card-text"><small class="text-muted">{{ item[1] }}</small></p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute("data-bs-theme");
+      html.setAttribute("data-bs-theme", current === "light" ? "dark" : "light");
+    }
+  </script>
+</body>
+</html>
